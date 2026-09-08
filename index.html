@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 5: Jerarquía y Listas - IDAT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --idat-yellow: #FFC820;
+            --idat-dark: #111827;
+            --idat-gray: #f3f4f6;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--idat-gray);
+            color: var(--idat-dark);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Sistema de Sliders */
+        #presentation-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .slide {
+            position: absolute;
+            width: 95%;
+            max-width: 1100px;
+            height: 85%;
+            max-height: 700px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            border-bottom: 10px solid var(--idat-yellow);
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            animation: slideIn 0.4s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Estilos de Contenido */
+        .idat-italic {
+            font-style: italic;
+            letter-spacing: -0.02em;
+        }
+
+        .code-header {
+            background: #1f2937;
+            color: #9ca3af;
+            padding: 8px 16px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .code-content {
+            background: #111827;
+            color: var(--idat-yellow);
+            padding: 20px;
+            font-family: 'monospace';
+            font-size: 16px;
+            line-height: 1.5;
+            flex: 1;
+            overflow: auto;
+        }
+
+        .preview-pane {
+            background: #f9fafb;
+            border-left: 1px solid #e5e7eb;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Navegación */
+        footer {
+            height: 80px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: var(--idat-dark);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 99px;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: var(--idat-yellow);
+            color: var(--idat-dark);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background: var(--idat-yellow);
+            transition: width 0.3s ease;
+            z-index: 200;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="progressBar" class="progress-bar" style="width: 14.28%;"></div>
+
+    <main id="presentation-container">
+        
+        <!-- SLIDE 1: PORTADA -->
+        <div class="slide active flex-row items-stretch" id="s1">
+            <div class="flex-1 bg-[#111827] p-16 flex flex-col justify-center text-white relative">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-[#FFC820] opacity-10 rounded-bl-full"></div>
+                <p class="text-[#FFC820] font-black tracking-widest text-sm mb-4 uppercase">Desarrollo Web I</p>
+                <h1 class="text-7xl font-black mb-8 leading-none idat-italic uppercase">
+                    Jerarquía y <br><span class="text-[#FFC820]">Listas</span>
+                </h1>
+                <div class="w-20 h-2 bg-[#FFC820] mb-8"></div>
+                <p class="text-xl text-gray-400 font-bold">Sesión 05 • Estructuración Semántica</p>
+            </div>
+            <div class="w-1/3 bg-[#FFC820] flex items-center justify-center p-12 text-center">
+                <div class="text-[#111827]">
+                    <p class="font-black text-sm uppercase tracking-widest mb-2">Docente</p>
+                    <p class="text-2xl font-black italic">Ing. Jhon Chavez</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: AGENDA -->
+        <div class="slide p-16" id="s2">
+            <h2 class="text-5xl font-black mb-12 border-l-8 border-[#FFC820] pl-6 uppercase idat-italic">Agenda de la Sesión</h2>
+            <div class="grid grid-cols-2 gap-6 flex-1">
+                <div class="p-6 bg-gray-50 rounded-2xl flex items-center gap-6 border border-gray-100 hover:shadow-lg transition-shadow">
+                    <span class="text-4xl font-black text-[#FFC820]">01</span>
+                    <p class="text-xl font-bold">Importancia de la Semántica HTML</p>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-2xl flex items-center gap-6 border border-gray-100 hover:shadow-lg transition-shadow">
+                    <span class="text-4xl font-black text-[#FFC820]">02</span>
+                    <p class="text-xl font-bold">Niveles de Encabezados (h1 - h6)</p>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-2xl flex items-center gap-6 border border-gray-100 hover:shadow-lg transition-shadow">
+                    <span class="text-4xl font-black text-[#FFC820]">03</span>
+                    <p class="text-xl font-bold">Listas Desordenadas (ul)</p>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-2xl flex items-center gap-6 border border-gray-100 hover:shadow-lg transition-shadow">
+                    <span class="text-4xl font-black text-[#FFC820]">04</span>
+                    <p class="text-xl font-bold">Listas Ordenadas (ol)</p>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-2xl flex items-center gap-6 border border-gray-100 hover:shadow-lg transition-shadow">
+                    <span class="text-4xl font-black text-[#FFC820]">05</span>
+                    <p class="text-xl font-bold">Modelo de Página Integrado</p>
+                </div>
+                <div class="p-6 bg-yellow-50 rounded-2xl flex items-center gap-6 border border-[#FFC820] shadow-md">
+                    <span class="text-4xl font-black text-[#111827]">06</span>
+                    <p class="text-xl font-bold italic">Reto de Laboratorio</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: ENCABEZADOS -->
+        <div class="slide flex-row" id="s3">
+            <div class="w-1/2 p-16 flex flex-col justify-center">
+                <h2 class="text-4xl font-black mb-6 uppercase italic">1. Jerarquía (h1-h6)</h2>
+                <p class="text-lg text-gray-600 mb-8 leading-relaxed">Los encabezados organizan el contenido por importancia. <strong>Nunca</strong> los uses solo para cambiar el tamaño del texto.</p>
+                <div class="rounded-xl overflow-hidden flex flex-col">
+                    <div class="code-header"><span>HTML5 Editor</span></div>
+                    <div class="code-content">
+                        &lt;h1&gt;Título Principal&lt;/h1&gt;<br>
+                        &lt;h2&gt;Subtítulo de Sección&lt;/h2&gt;<br>
+                        &lt;h3&gt;Detalle Específico&lt;/h3&gt;
+                    </div>
+                </div>
+            </div>
+            <div class="w-1/2 preview-pane">
+                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 italic">Vista del Navegador</p>
+                <div class="bg-white p-8 rounded-xl shadow-sm space-y-4">
+                    <h1 class="text-4xl font-black text-[#111827] border-b-2 border-gray-100 pb-2">Título Principal</h1>
+                    <h2 class="text-2xl font-bold text-gray-700">Subtítulo de Sección</h2>
+                    <h3 class="text-xl font-semibold text-gray-500 italic">Detalle Específico</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: UL -->
+        <div class="slide flex-row" id="s4">
+            <div class="w-1/2 p-16 flex flex-col justify-center">
+                <h2 class="text-4xl font-black mb-6 uppercase italic">2. Listas (ul)</h2>
+                <p class="text-lg text-gray-600 mb-8 leading-relaxed">Usamos <code>&lt;ul&gt;</code> para elementos donde el orden no es relevante (viñetas).</p>
+                <div class="rounded-xl overflow-hidden flex flex-col">
+                    <div class="code-header"><span>Estructura UL</span></div>
+                    <div class="code-content">
+                        &lt;ul&gt;<br>
+                        &nbsp;&nbsp;&lt;li&gt;Accesibilidad&lt;/li&gt;<br>
+                        &nbsp;&nbsp;&lt;li&gt;Semántica&lt;/li&gt;<br>
+                        &nbsp;&nbsp;&lt;li&gt;SEO&lt;/li&gt;<br>
+                        &lt;/ul&gt;
+                    </div>
+                </div>
+            </div>
+            <div class="w-1/2 preview-pane">
+                <div class="bg-white p-12 rounded-xl shadow-sm">
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-4 text-2xl font-bold text-[#111827]">
+                            <div class="w-3 h-3 bg-[#FFC820] rotate-45"></div> Accesibilidad
+                        </li>
+                        <li class="flex items-center gap-4 text-2xl font-bold text-[#111827]">
+                            <div class="w-3 h-3 bg-[#FFC820] rotate-45"></div> Semántica
+                        </li>
+                        <li class="flex items-center gap-4 text-2xl font-bold text-[#111827]">
+                            <div class="w-3 h-3 bg-[#FFC820] rotate-45"></div> SEO
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: OL -->
+        <div class="slide flex-row" id="s5">
+            <div class="w-1/2 p-16 flex flex-col justify-center">
+                <h2 class="text-4xl font-black mb-6 uppercase italic">3. Listas (ol)</h2>
+                <p class="text-lg text-gray-600 mb-8 leading-relaxed">Usamos <code>&lt;ol&gt;</code> para procesos, tutoriales o cualquier secuencia lógica numerada.</p>
+                <div class="rounded-xl overflow-hidden flex flex-col">
+                    <div class="code-header"><span>Estructura OL</span></div>
+                    <div class="code-content">
+                        &lt;ol&gt;<br>
+                        &nbsp;&nbsp;&lt;li&gt;Analizar&lt;/li&gt;<br>
+                        &nbsp;&nbsp;&lt;li&gt;Maquetar&lt;/li&gt;<br>
+                        &nbsp;&nbsp;&lt;li&gt;Codificar&lt;/li&gt;<br>
+                        &lt;/ol&gt;
+                    </div>
+                </div>
+            </div>
+            <div class="w-1/2 preview-pane">
+                <div class="bg-white p-12 rounded-xl shadow-sm">
+                    <ol class="space-y-6">
+                        <li class="flex items-center gap-6 text-2xl font-black text-[#111827]">
+                            <span class="w-12 h-12 bg-[#111827] text-[#FFC820] flex items-center justify-center rounded-full text-xl italic">1</span>
+                            Analizar
+                        </li>
+                        <li class="flex items-center gap-6 text-2xl font-black text-[#111827]">
+                            <span class="w-12 h-12 bg-[#111827] text-[#FFC820] flex items-center justify-center rounded-full text-xl italic">2</span>
+                            Maquetar
+                        </li>
+                        <li class="flex items-center gap-6 text-2xl font-black text-[#111827]">
+                            <span class="w-12 h-12 bg-[#111827] text-[#FFC820] flex items-center justify-center rounded-full text-xl italic">3</span>
+                            Codificar
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: MODELO DE PÁGINA -->
+        <div class="slide flex-row" id="s6">
+            <div class="w-1/2 p-12 flex flex-col justify-center border-r border-gray-100 overflow-y-auto bg-gray-50">
+                <h2 class="text-4xl font-black mb-4 uppercase italic">4. Modelo Integrado</h2>
+                <p class="text-lg text-gray-500 mb-6 font-medium">Ejemplo final: Integrando todos los conceptos en una estructura de noticia real.</p>
+                <div class="rounded-xl overflow-hidden flex flex-col shadow-lg">
+                    <div class="code-header"><span>index.html</span></div>
+                    <div class="code-content text-xs">
+                        &lt;article&gt;<br>
+                        &nbsp;&nbsp;&lt;h1&gt;Diseño Web 2024&lt;/h1&gt;<br>
+                        &nbsp;&nbsp;&lt;p&gt;Aprende &lt;strong&gt;HTML&lt;/strong&gt; hoy.&lt;/p&gt;<br>
+                        &nbsp;&nbsp;&lt;h2&gt;Requisitos:&lt;/h2&gt;<br>
+                        &nbsp;&nbsp;&lt;ul&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Editor de código&lt;/li&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Navegador&lt;/li&gt;<br>
+                        &nbsp;&nbsp;&lt;/ul&gt;<br>
+                        &nbsp;&nbsp;&lt;h2&gt;Pasos:&lt;/h2&gt;<br>
+                        &nbsp;&nbsp;&lt;ol&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Escribir HTML&lt;/li&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Visualizar&lt;/li&gt;<br>
+                        &nbsp;&nbsp;&lt;/ol&gt;<br>
+                        &lt;/article&gt;
+                    </div>
+                </div>
+            </div>
+            <div class="w-1/2 p-8 flex items-center justify-center">
+                <article class="bg-white border-2 border-[#111827] rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden">
+                    <div class="bg-[#111827] p-4">
+                        <h1 class="text-[#FFC820] text-[10px] font-black uppercase tracking-[0.3em] text-center italic">IDAT TECH HUB</h1>
+                    </div>
+                    <div class="p-8">
+                        <h2 class="text-3xl font-black text-[#111827] leading-none mb-4 italic uppercase">Dominando el Marcado</h2>
+                        <p class="text-sm text-gray-600 mb-6 leading-relaxed">
+                            Es <strong>vital</strong> estructurar correctamente. El navegador <em>agradecerá</em> tu buena jerarquía.
+                        </p>
+                        <h3 class="text-[10px] font-black text-gray-400 uppercase mb-3 tracking-widest">Lo que necesitas:</h3>
+                        <ul class="list-disc pl-5 text-sm font-bold text-[#111827] space-y-2 mb-6">
+                            <li>Lógica de Negocio</li>
+                            <li>Visión UX/UI</li>
+                        </ul>
+                        <div class="border-t border-gray-100 pt-6">
+                            <h3 class="text-[10px] font-black text-gray-400 uppercase mb-3 tracking-widest">Pasos a seguir:</h3>
+                            <ol class="space-y-2">
+                                <li class="flex items-center gap-3 text-sm font-black italic">
+                                    <span class="w-6 h-6 bg-[#FFC820] flex items-center justify-center rounded text-[10px]">1</span> Planear
+                                </li>
+                                <li class="flex items-center gap-3 text-sm font-black italic">
+                                    <span class="w-6 h-6 bg-[#FFC820] flex items-center justify-center rounded text-[10px]">2</span> Ejecutar
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: LABORATORIO -->
+        <div class="slide bg-[#111827] text-white p-16 flex-col items-center justify-center text-center" id="s7">
+            <div class="max-w-2xl">
+                <h2 class="text-[#FFC820] text-6xl font-black italic uppercase mb-8 leading-none">Reto de Laboratorio</h2>
+                <div class="w-24 h-2 bg-white mx-auto mb-12"></div>
+                <div class="bg-white/5 p-12 rounded-[40px] border border-white/10 text-left">
+                    <ul class="space-y-8">
+                        <li class="flex gap-6 items-start">
+                            <span class="bg-[#FFC820] text-[#111827] w-10 h-10 rounded-xl flex items-center justify-center font-black flex-shrink-0">1</span>
+                            <p class="text-xl font-bold">Crea una página de "Receta de Cocina" estructurada.</p>
+                        </li>
+                        <li class="flex gap-6 items-start">
+                            <span class="bg-[#FFC820] text-[#111827] w-10 h-10 rounded-xl flex items-center justify-center font-black flex-shrink-0">2</span>
+                            <p class="text-xl font-bold">Usa h1 para el nombre, h2 para secciones y h3 para detalles.</p>
+                        </li>
+                        <li class="flex gap-6 items-start">
+                            <span class="bg-[#FFC820] text-[#111827] w-10 h-10 rounded-xl flex items-center justify-center font-black flex-shrink-0">3</span>
+                            <p class="text-xl font-bold">Incluye los ingredientes en una lista desordenada.</p>
+                        </li>
+                        <li class="flex gap-6 items-start">
+                            <span class="bg-[#FFC820] text-[#111827] w-10 h-10 rounded-xl flex items-center justify-center font-black flex-shrink-0">4</span>
+                            <p class="text-xl font-bold">Incluye los pasos de preparación en una lista ordenada.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER NAV -->
+    <footer>
+        <div class="flex items-center gap-4">
+            <span class="text-[10px] font-black text-gray-300 uppercase tracking-widest">IDAT • Facultad de Tecnología</span>
+        </div>
+
+        <div class="flex items-center gap-6">
+            <button id="prevBtn" onclick="changeSlide(-1)" class="nav-btn" disabled>
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+                Anterior
+            </button>
+            
+            <div class="bg-gray-100 px-6 py-2 rounded-full font-black text-xl italic min-w-[100px] text-center">
+                <span id="slideIndicator">1</span> <span class="text-gray-300 mx-1">/</span> 7
+            </div>
+
+            <button id="nextBtn" onclick="changeSlide(1)" class="nav-btn">
+                Siguiente
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+            </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+            <span class="text-[10px] font-black text-[#111827] uppercase italic">Sesión Interactiva Activa</span>
+        </div>
+    </footer>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 7;
+
+        function changeSlide(direction) {
+            const next = currentSlide + direction;
+            if (next >= 1 && next <= totalSlides) {
+                // Desactivar actual
+                document.getElementById(`s${currentSlide}`).classList.remove('active');
+                
+                currentSlide = next;
+                
+                // Activar nueva
+                document.getElementById(`s${currentSlide}`).classList.add('active');
+                
+                updateInterface();
+            }
+        }
+
+        function updateInterface() {
+            // Actualizar botones
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+            
+            // Actualizar número
+            document.getElementById('slideIndicator').innerText = currentSlide;
+            
+            // Actualizar barra de progreso
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        // Soporte para teclado
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+        });
+
+        // Asegurar que cargue correctamente
+        window.onload = updateInterface;
+    </script>
+</body>
+</html>
